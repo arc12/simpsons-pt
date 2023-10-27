@@ -16,17 +16,20 @@ class Langstrings(LangstringsBase):
             "en": "Simulate"
         },
         "COMPARE_LABEL": {
-            "en": "Compare category:"
+            "en": "Compare category"
         },
         "FACET_LABEL": {
-            "en": "Show Facets:"
+            "en": "Show Facets"
         },
         "NONE": {
             "en": "None"
         },
         "COUNT": {
             "en": "Count"
-        }
+        },
+        "SIMULATE": {
+            "en": "Simulate"
+        },
     }
 
 # The menu is only shown if menu=1 in query-string AND only for specific views. Generally make the menu contain all views it is coded for
@@ -36,9 +39,9 @@ class Langstrings(LangstringsBase):
 # The ROOT for a plaything is the index cards page and should not be in the menu.
 # This defines the default order and the maximum scope of views in the meny. A plaything specification may override.
 menu = {
-    "explore_categorical": "MENU_EXPLORE",
-    "explore_continuous": "MENU_EXPLORE",
-    "simulate": "MENU_SIMULATE"
+    "explore-categorical": "MENU_EXPLORE",
+    "explore-continuous": "MENU_EXPLORE",
+    "simulate-categorical": "MENU_SIMULATE"
 }
 
 # This sets up core features such as logger, activity recording, core-config.

@@ -3,7 +3,7 @@ import logging
 from flask import Flask, render_template, session, request, abort, Blueprint
 
 from pg_shared import prepare_app
-from SimpsonsFlask.dash_apps import dash_explore_categorical
+from SimpsonsFlask.dash_apps import dash_explore_categorical, dash_simulate_categorical
 from simpsons import PLAYTHING_NAME, Langstrings, core, menu
 
 plaything_root = core.plaything_root
@@ -51,3 +51,6 @@ app.register_blueprint(pt_bp, url_prefix=plaything_root)
 # DASH Apps and route spec. NB these do need the URL prefix
 dec_view = dash_explore_categorical.view_name
 app = dash_explore_categorical.create_dash(app, f"{plaything_root}/{dec_view}/<specification_id>", f"{plaything_root}/dash/{dec_view}/")
+
+dsc_view = dash_simulate_categorical.view_name
+app = dash_simulate_categorical.create_dash(app, f"{plaything_root}/{dsc_view}/<specification_id>", f"{plaything_root}/dash/{dsc_view}/")
