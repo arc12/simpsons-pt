@@ -8,7 +8,7 @@ from dash import html, dcc, callback_context, no_update
 import plotly.express as px
 from dash.dependencies import Output, Input  #, State
 
-view_name = "explore-categorical"
+view_name = "explore-categorical"  # this is required
 
 def create_dash(server, url_rule, url_base_pathname):
     """Create a Dash view"""

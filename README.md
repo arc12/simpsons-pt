@@ -27,7 +27,7 @@ These entries refer to column headings in the source data (see __asset_map__):
 - input_count_label [simple text]: the label to use in the plots showing counts by input category/ies (summed over outcomes)
 - initial_variable [simple text]: the column which will be shown in the initial plot as the independent variable, i.e. when this is plotted, the Simpson's Paradox is shown.
 - category_orders [structure]: an optional setting to control the order in which categories appear on plot axes.
-- simulate_categories [list of strings]: if the simulation view is to be used, this must be an ordered list of the two categories to use. The second MUST be a binary and is presented as a slider to control the balance of the two categories. The first may be a category with multiple possible values; the user enters numbers.
+- simulate_categories [list of strings]: if the simulation view is to be used, this must be an ordered list of the two variables to use. The second MUST be a binary and is presented as a slider to control the balance of the two categories. It will normally be the same as __initial_variable__ so that the simulation matches the poser question. The first may be a category-type with multiple possible values; the user enters numbers of individuals (etc) for each of these. This is the variable which resolves the 'paradox'.
 
 __category_orders__ may be omitted and only need contain entries for those columns for which ordering is desired. It is structured:
 - {column heading}: list of categories. Example, where "Age" is a column heading: "category_orders": {"Age": ["< 50", "50 +"]}

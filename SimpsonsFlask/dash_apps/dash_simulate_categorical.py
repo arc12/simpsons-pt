@@ -8,7 +8,7 @@ from dash import html, dcc, callback_context, no_update
 import plotly.express as px
 from dash.dependencies import Output, Input, State
 
-view_name = "simulate-categorical"
+view_name = "simulate-categorical"  # this is required
 
 def create_dash(server, url_rule, url_base_pathname):
     """Create a Dash view"""
@@ -75,8 +75,10 @@ def create_dash(server, url_rule, url_base_pathname):
         spec = core.get_specification(specification_id)
         langstrings = Langstrings(spec.lang)
 
+        menu_children = spec.make_menu(menu, langstrings, core.plaything_root, view_name, query_string=querystring, for_dash=True)
+
         if "simulate_categories" not in spec.detail:
-            abort(404, "'simulate_categories' missing from config")
+            return [menu_children, "Error: 'simulate_categories' missing from config", None, None, None]
 
         # the category table and configured column usage
         outcome_col = spec.detail["outcome"]
@@ -92,8 +94,13 @@ def create_dash(server, url_rule, url_base_pathname):
         col2_pc_category = col2_values[0]
         col2_pc = pd.pivot_table(data, values="N", index=sim_cols[0], columns=sim_cols[1]).apply(lambda x: int(100 * x[col2_pc_category] / sum(x)), axis=1)
         if len(col2_values) != 2:
-            abort(500, "'simulate_categories' is mis-specified")
-        base_pc = pd.pivot_table(data, values="N", index=sim_cols, columns=outcome_col).apply(lambda x: int(100 * x[outcome_numerator] / sum(x)), axis=1)
+            return [menu_children, "Error: 'simulate_categories' is mis-specified", None, None, None]
+        base_pc = pd.pivot_table(data, values="N", index=sim_cols, columns=outcome_col).apply(lambda x: 100 * x[outcome_numerator] / sum(x), axis=1)
+        # generally round the percentages to integers but some situations may have very small values
+        if base_pc.median() > 20:
+            base_pc = base_pc.round(0).astype(int)
+        else:
+            base_pc = base_pc.round(2)
 
         # I initially tried using Bootstrap grid layout but React.js had problems on the client side. Might be my mis-use but still... now using tables
         # heading - col widths should match the parameter input structure
@@ -116,7 +123,7 @@ def create_dash(server, url_rule, url_base_pathname):
                 html.Td(dcc.Input(type="text", value=cnt1, size=5, id="c1_" + cat1.replace(" ", "_"))),  # count for col1 category
                 html.Td(dcc.Input(type="range", value=col2_pc.loc[cat1], min=1, max=100, id=f"c2_{cat1.replace(' ', '_')}~{col2_pc_category}")),  # col2 proportion slider
                 # category pair base rates
-                html.Td([dcc.Input(type="number", value=base_pc.loc[(cat1, cat2)], min=0, max=100, size=6, id=f"br_{cat1.replace(' ', '_')}~{cat2.replace(' ', '_')}") for cat2 in col2_values])
+                html.Td([dcc.Input(type="text", value=base_pc.loc[(cat1, cat2)], size=6, id=f"br_{cat1.replace(' ', '_')}~{cat2.replace(' ', '_')}") for cat2 in col2_values])
             ]
             sim_params_rows.append(html.Tr(cells))
         
@@ -125,7 +132,6 @@ def create_dash(server, url_rule, url_base_pathname):
             html.Tbody(sim_params_rows)
         ], className="table")
 
-        menu_children = spec.make_menu(menu, langstrings, core.plaything_root, view_name, query_string=querystring, for_dash=True)
         output = [
             menu_children,
             spec.title,
@@ -167,14 +173,14 @@ def create_dash(server, url_rule, url_base_pathname):
         outcome_rate_label = spec.detail["outcome_rate_label"]
         initial_variable_col = spec.detail["initial_variable"]
         category_orders = spec.detail.get("category_orders", None)
-        sim_cols = spec.detail["simulate_categories"]
+        sim_cols = spec.detail.get("simulate_categories", None)
 
-        if len(sim_params) == 0:
+        if len([] if sim_params is None else sim_params) == 0:
             # pre-sim, show blank bar chart with correct axis labels
             dummy_fig = px.bar(pd.DataFrame(columns=[initial_variable_col, "outcome_rate"]), x=initial_variable_col, y="outcome_rate")
             dummy_fig.update_yaxes({"title": outcome_rate_label})
             return dummy_fig, ""
-        
+
         facet = "facet" in ([] if sim_options is None else sim_options)
 
         # extract the simulation parameters from the HTML mess! This ABSOLUTELY depends on the structure, although the ids etc would allow a semantic extraction
@@ -187,7 +193,7 @@ def create_dash(server, url_rule, url_base_pathname):
                 cat1_cnt = float(cells[1]["props"]["children"]["props"]["value"])
                 cat2_pc = float(cells[2]["props"]["children"]["props"]["value"])
                 col2_pc_category = cells[2]["props"]["children"]["props"]["id"].split("~")[1]  # extract of category for col2 ensures no accidental category transposition
-                base_rates = {ri["props"]["id"].split("~")[1]: int(ri["props"]["value"])  for ri in cells[3]["props"]["children"]}
+                base_rates = {ri["props"]["id"].split("~")[1]: float(ri["props"]["value"])  for ri in cells[3]["props"]["children"]}
                 # list of dicts with keys matching the CSV headers in the source data
                 for cat2, base_rate in base_rates.items():
                     cat2_prop = 0.01 * (cat2_pc if cat2 == col2_pc_category else (100 - cat2_pc))
