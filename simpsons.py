@@ -21,6 +21,9 @@ class Langstrings(LangstringsBase):
         "FACET_LABEL": {
             "en": "Show Facets"
         },
+        "GROUP_BY": {
+            "en": "Group by"
+        },
         "NONE": {
             "en": "None"
         },

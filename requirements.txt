@@ -8,5 +8,6 @@ Flask
 Dash
 
 pandas
+scikit-learn
 
 markdown
