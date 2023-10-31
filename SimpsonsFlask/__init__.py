@@ -53,9 +53,3 @@ app.register_blueprint(pt_bp, url_prefix=plaything_root)
 add_dash_to_routes(app, dash_explore_categorical, plaything_root)
 add_dash_to_routes(app, dash_simulate_categorical, plaything_root)
 add_dash_to_routes(app, dash_explore_continuous, plaything_root)
-
-# dec_view = dash_explore_categorical.view_name
-# app = dash_explore_categorical.create_dash(app, f"{plaything_root}/{dec_view}/<specification_id>", f"{plaything_root}/dash/{dec_view}/")
-
-# dsc_view = dash_simulate_categorical.view_name
-# app = dash_simulate_categorical.create_dash(app, f"{plaything_root}/{dsc_view}/<specification_id>", f"{plaything_root}/dash/{dsc_view}/")
