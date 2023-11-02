@@ -28,7 +28,7 @@ def validate():
     core.record_activity("validate", None, session, referrer=request.referrer, tag=request.args.get("tag", None))
 
     return render_template("index_cards.html",
-                           specifications=core.get_specifications(include_disabled=True, check_assets=["world_pop"], check_optional_assets=["about"]),
+                           specifications=core.get_specifications(include_disabled=True, check_assets=["data"]),
                            with_link=False)
 
 # @pt_bp.route("/about/<specification_id>", methods=['GET'])
