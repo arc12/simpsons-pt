@@ -103,7 +103,7 @@ def create_dash(server, url_rule, url_base_pathname):
         input_count_label = spec.detail.get("input_count_label", langstrings.get("COUNT"))
         initial_variable_col = spec.detail["initial_variable"]
         category_orders = spec.detail.get("category_orders", None)
-        data = spec.load_asset_dataframe("category_counts")
+        data = spec.load_asset_dataframe("data")
         prop_categories = set(data.columns).difference({"N", outcome_col})  # the columns which the user can choose to explore.
     
         if callback_context.triggered_id == "location":

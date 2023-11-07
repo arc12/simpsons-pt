@@ -86,7 +86,7 @@ def create_dash(server, url_rule, url_base_pathname):
         outcome_numerator = spec.detail["outcome_numerator"]
         outcome_rate_label = spec.detail["outcome_rate_label"]
         input_count_label = spec.detail.get("input_count_label", langstrings.get("COUNT"))
-        data = spec.load_asset_dataframe("category_counts")
+        data = spec.load_asset_dataframe("data")
     
         col1_sums = data.groupby(sim_cols[0]).N.sum()
         col2_values = list(data[sim_cols[1]].unique())
