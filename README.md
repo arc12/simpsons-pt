@@ -18,7 +18,7 @@ Notes:
 - Simulate is only available for the categorical case and takes its starting parameter values from the CSV file which defines the Explore case, although this need not be included in the menu.
 - The menu label used for both Explore views is the same but the URL differs; the menu does not include "Categorical" etc.
 
-### detail - categorical
+### "detail" - categorical
 - question [simple text]: is the optional "poser" question to present on the Explore view.
 
 These entries refer to column headings in the source data (see __asset_map__):
@@ -33,12 +33,12 @@ These entries refer to column headings in the source data (see __asset_map__):
 __category_orders__ may be omitted and only need contain entries for those columns for which ordering is desired. It is structured:
 - {column heading}: list of categories. Example, where "Age" is a column heading: "category_orders": {"Age": ["< 50", "50 +"]}
 
-### detail - continuous
+### "detail" - continuous
 - question: as above
 - continuous_cols [list with two members]: the column headings for the two continuous variables in the CSV file
 - category_orders: as above
 
-### asset_map
+### "asset_map"
 The source data is declared differently for categorical and continuous cases:
 - For categorical cases, the CSV must contain a column with heading "N" which is the tally and at least the columns declared in "outcome" and "initial_variable" entries in __detail__.
 - For continuous cases, it must contain both of the __continuous_cols__ and at least one categorical column.
