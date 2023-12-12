@@ -5,7 +5,7 @@ Plaything name: simpsons
 
 ## Plaything Specification
 Refer to the README in the pg_shared repository/folder for common elements; this README refers only to the elements which are specific to the Simpson's Paradox Plaything.
-For the Attribute Issues Plaything, the Specifications folder is Config/simpsons.
+The Specifications folder is Config/simpsons.
 
 Available views:
 - "explore-categorical"
