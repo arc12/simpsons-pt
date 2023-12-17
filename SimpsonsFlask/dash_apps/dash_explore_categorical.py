@@ -34,7 +34,7 @@ def create_dash(server, url_rule, url_base_pathname):
             [
                 html.Div(
                     [
-                        html.Label("Compare category:", id="compare_label", style={"margin-top": "50px"}),
+                        html.Label("Compare category:", id="compare_label", style={"margin-top": "0px"}),
                         dcc.Dropdown(id="compare_options", searchable=False, clearable=False, style={"margin-left": "10px"}),
                         html.Label("Show Facets:", id="facet_label", style={"margin-top": "10px"}),
                         dcc.Dropdown(value="none", id="facet_options", searchable=False, clearable=False, style={"margin-left": "10px"})
@@ -43,11 +43,11 @@ def create_dash(server, url_rule, url_base_pathname):
                 html.Div(
                     [
                         dcc.Loading(
-                            dcc.Graph(id="rates_chart"),
+                            dcc.Graph(id="rates_chart", config={'displayModeBar': False}),
                             type="circle"
                         ),
                         dcc.Loading(
-                            dcc.Graph(id="counts_chart"),
+                            dcc.Graph(id="counts_chart", config={'displayModeBar': False}),
                             type="circle"
                         )
                     ], className="col"
@@ -162,7 +162,7 @@ def create_dash(server, url_rule, url_base_pathname):
                                     x=compare_selected, y="outcome_rate", color=facet_selected, barmode="group", category_orders=category_orders)
 
         outcome_figure.update_yaxes({"title": outcome_rate_label})
-        outcome_figure.update_layout({"hovermode": "x", "yaxis_ticksuffix": '%'})
+        outcome_figure.update_layout({"hovermode": "x", "yaxis_ticksuffix": '%', "margin": {"t": 5, "b": 10, "r": 20, "l":50}})
         outcome_figure.update_traces({"hovertemplate": f"{outcome_rate_label} = %{{y:.2f}}%"})
         output.append(outcome_figure)
 
@@ -180,6 +180,7 @@ def create_dash(server, url_rule, url_base_pathname):
             counts_figure = px.bar(counts_data.sort_values(by=[compare_selected, facet_selected]),
                                    x=compare_selected, y="Count", color=facet_selected, barmode="group", category_orders=category_orders)
         counts_figure.update_yaxes({"title": input_count_label})
+        counts_figure.update_layout({"margin": {"t": 15, "r": 20, "l":50}})
         output.append(counts_figure)
 
         return output

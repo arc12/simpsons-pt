@@ -40,13 +40,13 @@ def create_dash(server, url_rule, url_base_pathname):
             [
                 html.Div(
                     [
-                        html.Label("Group by:", id="group_label", style={"margin-top": "50px"}),
+                        html.Label("Group by:", id="group_label", style={"margin-top": "20px"}),
                         dcc.Dropdown(value="none", id="group_options", searchable=False, clearable=False, style={"margin-left": "10px"})
                     ], className="col-sm-3"
                 ),
                 html.Div(
                     [
-                        dcc.Loading(dcc.Graph(id="chart"), type="circle")
+                        dcc.Loading(dcc.Graph(id="chart", config={'displayModeBar': False}), type="circle")
                     ], className="col"
                 )
             ], className="row"
@@ -118,8 +118,22 @@ def create_dash(server, url_rule, url_base_pathname):
         if group_selected == "none":
             lm_fit = fit(data)
             traces = [
-                go.Scatter(x=data[continuous_cols[0]], y=data[continuous_cols[1]], mode="markers", showlegend=False),
-                go.Scatter(x=lm_fit[0], y=lm_fit[1], mode = "lines", name="fit", line={"color": "black", "dash": "dot"}, showlegend=False)
+                go.Scatter(
+                    x=data[continuous_cols[0]],
+                    y=data[continuous_cols[1]],
+                    mode="markers",
+                    showlegend=False,
+                    name="",
+                    hovertemplate="%{x:.2f}, %{y:.2f}"
+                ),
+                go.Scatter(
+                    x=lm_fit[0],
+                    y=lm_fit[1],
+                    mode="lines",
+                    name="fit",
+                    line={"color": "black", "dash": "dot"},
+                    showlegend=False
+                )
             ]
         else:
             colours = ["#636EFA", "#EF553B", "#00CC96", "#AB63FA", "#FFA15A", "#19D3F3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"]
@@ -127,14 +141,29 @@ def create_dash(server, url_rule, url_base_pathname):
             col_ix = 0
             for cat, cat_data in data.groupby(group_selected):
                 lm_fit = fit(cat_data)
-                traces.append(go.Scatter(x=cat_data[continuous_cols[0]], y=cat_data[continuous_cols[1]], mode="markers", marker_color=colours[col_ix], showlegend=True, name=cat))
+                traces.append(
+                    go.Scatter(
+                        x=cat_data[continuous_cols[0]],
+                        y=cat_data[continuous_cols[1]],
+                        mode="markers",
+                        marker_color=colours[col_ix],
+                        showlegend=True,
+                        name=cat,
+                        hovertemplate="%{x:.2f}, %{y:.2f}"
+                    )
+                )
                 traces.append(go.Scatter(x=lm_fit[0], y=lm_fit[1], mode = "lines", name=f"fit_{cat}", line={"color": "black", "dash": "dot"}, showlegend=False))
                 col_ix = (col_ix + 1) % len(colours)
 
         output.append(
             go.Figure(
                 data=traces,
-                layout=go.Layout(xaxis={"title": continuous_cols[0]}, yaxis={"title": continuous_cols[1]}, legend={"title": group_selected}, margin_t=55, height=600)
+                layout=go.Layout(
+                    xaxis={"title": continuous_cols[0]},
+                    yaxis={"title": continuous_cols[1]},
+                    legend={"title": group_selected},
+                    margin={"t": 25, "r": 20, "l":50},
+                    height=600)
             )
         )
 

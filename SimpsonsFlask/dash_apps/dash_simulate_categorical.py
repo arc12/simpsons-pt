@@ -42,7 +42,7 @@ def create_dash(server, url_rule, url_base_pathname):
         html.Div(
             [
                 html.Div(dcc.Checklist(id="sim_options"), className="col-md-2"),
-                html.Div(dcc.Loading(dcc.Graph(id="rates_chart"), type="circle"), className="col-md-10")
+                html.Div(dcc.Loading(dcc.Graph(id="rates_chart", config={'displayModeBar': False}), type="circle"), className="col-md-10")
             ], className="row"
         )
 
@@ -235,7 +235,7 @@ def create_dash(server, url_rule, url_base_pathname):
                                 x=sim_cols[1], y="outcome_rate", color=sim_cols[0], barmode="group", category_orders=category_orders)
 
         outcome_figure.update_yaxes({"title": outcome_rate_label})
-        outcome_figure.update_layout({"hovermode": "x", "yaxis_ticksuffix": '%'})
+        outcome_figure.update_layout({"hovermode": "x", "yaxis_ticksuffix": '%', "margin": {"t": 5, "r": 20, "l":50}})
         outcome_figure.update_traces({"hovertemplate": f"{outcome_rate_label} = %{{y:.2f}}%"})
 
         # activity log
